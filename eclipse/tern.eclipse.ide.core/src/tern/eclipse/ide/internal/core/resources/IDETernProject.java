@@ -430,7 +430,8 @@ public class IDETernProject extends TernProject implements IIDETernProject, ITer
 	 */
 	@Override
 	public List<ITernScriptPath> getScriptPaths() {
-		return scriptPaths;
+//		return scriptPaths;
+		return Collections.emptyList();
 	}
 
 	/**

@@ -42,5 +42,15 @@
 		<initializer
 			class="tern.eclipse.ide.internal.core.preferences.TernCorePreferenceInitializer" />
 	</extension>
+ <extension
+       point="org.eclipse.core.runtime.adapters">
+    <factory
+          adaptableType="org.eclipse.core.resources.IProject"
+          class="tern.eclipse.ide.internal.core.TernAdapterFactory">
+       <adapter
+             type="tern.ITernProject">
+       </adapter>
+    </factory>
+ </extension>
 				
 </plugin>        
