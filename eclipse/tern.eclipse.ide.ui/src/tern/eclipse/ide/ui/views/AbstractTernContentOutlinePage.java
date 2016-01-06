@@ -14,31 +14,49 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.part.Page;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import tern.eclipse.ide.core.TernCorePlugin;
 import tern.eclipse.ide.internal.ui.Trace;
+import tern.eclipse.ide.internal.ui.views.actions.LinkEditorAction;
 import tern.eclipse.ide.internal.ui.views.actions.TerminateTernServerAction;
 import tern.eclipse.ide.ui.utils.EditorUtils;
 import tern.server.ITernServer;
 import tern.server.ITernServerListener;
 import tern.server.protocol.outline.IJSNode;
 
-public abstract class AbstractTernContentOutlinePage extends Page implements IContentOutlinePage, ITernServerListener {
+public abstract class AbstractTernContentOutlinePage extends Page
+		implements IContentOutlinePage, ITernServerListener {
+
+	private final AbstractTernOutlineView view;
+	private IFile currentFile;
+
+	public AbstractTernContentOutlinePage(AbstractTernOutlineView view) {
+		this.view = view;
+	}
 
 	private CommonViewer viewer;
+
+	private LinkEditorAction toggleLinkingAction;
 	private TerminateTernServerAction terminateAction;
 
 	@Override
@@ -118,6 +136,8 @@ public abstract class AbstractTernContentOutlinePage extends Page implements ICo
 	}
 
 	protected void registerActions(IToolBarManager manager) {
+		this.toggleLinkingAction = new LinkEditorAction(view, getViewer());
+		manager.add(toggleLinkingAction);
 		this.terminateAction = new TerminateTernServerAction(this);
 		manager.add(terminateAction);
 	}
@@ -145,13 +165,21 @@ public abstract class AbstractTernContentOutlinePage extends Page implements ICo
 
 	@Override
 	public void dispose() {
-		super.dispose();
+		super.dispose();		
 		try {
 			IProject project = getProject();
 			TernCorePlugin.getTernProject(project).removeServerListener(this);
 		} catch (CoreException e) {
 			Trace.trace(Trace.SEVERE, "error while getting tern project", e);
 		}
+	}
+
+	public void setCurrentFile(IFile file) {
+		this.currentFile = file;
+	}
+
+	public IFile getCurrentFile() {
+		return currentFile;
 	}
 
 	protected abstract String getViewerId();

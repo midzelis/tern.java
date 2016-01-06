@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
 import tern.eclipse.ide.internal.ui.TernUIMessages;
+import tern.eclipse.ide.ui.TernUIPlugin;
 import tern.server.protocol.outline.IJSNode;
 import tern.server.protocol.outline.IJSNodeRoot;
 import tern.server.protocol.outline.TernOutlineCollector;
@@ -45,6 +47,12 @@ public abstract class AbstractTernOutlineContentProvider implements ITreeContent
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				parsed = false;
+				Display.getDefault().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						viewer.refresh();
+					}
+				});
 				try {
 					outline = loadOutline();
 					if (outline != null) {
@@ -68,7 +76,7 @@ public abstract class AbstractTernOutlineContentProvider implements ITreeContent
 						});
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					return new Status(Status.ERROR, TernUIPlugin.PLUGIN_ID, "Error while loading tern outline...", e);
 				}
 				return Status.OK_STATUS;
 			}

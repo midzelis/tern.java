@@ -12,6 +12,7 @@ package tern.eclipse.ide.internal.ui.views;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import tern.TernResourcesManager;
@@ -32,10 +33,11 @@ public class TernOutlineView extends AbstractTernOutlineView {
 	}
 
 	@Override
-	protected IContentOutlinePage createOutlinePage(IFile file) {
+	protected IContentOutlinePage createOutlinePage(IWorkbenchPart part, IFile file) {
 		IDocument document = EditorUtils.getDocument(file);
 		if (document != null) {
-			return new TernContentOutlinePage(new TernDocumentFile(file, document));
+			TernContentOutlinePage page = new TernContentOutlinePage(new TernDocumentFile(file, document), this);
+			return page;
 		}
 		return null;
 	}

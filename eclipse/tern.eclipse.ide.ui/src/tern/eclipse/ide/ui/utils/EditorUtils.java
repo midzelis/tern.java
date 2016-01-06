@@ -139,7 +139,7 @@ public class EditorUtils {
 	}
 
 	public static IDocument getDocument(ITextEditor editor) {
-		return (editor).getDocumentProvider().getDocument(
+		return editor.getDocumentProvider().getDocument(
 				editor.getEditorInput());
 	}
 
