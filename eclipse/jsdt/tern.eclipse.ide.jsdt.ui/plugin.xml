@@ -25,8 +25,9 @@
 	<extension point="org.eclipse.wst.jsdt.ui.javaCompletionProposalComputer"
 	   id="TernCompletionProposalComputer">
 	   <javaCompletionProposalComputer
-	      class="tern.eclipse.ide.jsdt.internal.ui.contentassist.TernCompletionProposalComputer"
-	      categoryId="tern.eclipse.ide.jsdt.ui.TernCompletionProposalCategory">
+          activate="true"
+          categoryId="tern.eclipse.ide.jsdt.ui.TernCompletionProposalCategory"
+          class="tern.eclipse.ide.jsdt.internal.ui.contentassist.TernCompletionProposalComputer">
 	   </javaCompletionProposalComputer>
 	 </extension>
 

@@ -239,7 +239,7 @@ public class TernRepository implements ITernRepository {
 			ZipUtils.extract(moduleFile, baseDir);
 		} else if (moduleFile.isDirectory()) {
 			// Folder, copy this folder to the tern repository
-			IOUtils.copy(moduleFile, new File(baseDir, moduleFile.getName()), false);
+			IOUtils.copy(moduleFile, new File(baseDir, moduleFile.getName()), true);
 		} else {
 			throw new TernException("Cannot install module file <" + TernModuleHelper.getPath(moduleFile)
 					+ ">. It must be a folder or a zip/jar file.");
