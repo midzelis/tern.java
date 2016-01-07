@@ -14,4 +14,4 @@ Require-Bundle: org.eclipse.swt;bundle-version="3.7.0",
  org.apache.commons.logging,
  tern.server.nashorn;bundle-version="1.1.0"
 Import-Package: org.mozilla.javascript,
- com.eclipsesource.json;version="[0.9.4,0.9.5)"
+ com.eclipsesource.json

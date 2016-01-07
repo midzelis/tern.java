@@ -11,10 +11,10 @@ import tern.eclipse.ide.internal.core.resources.IDEResourcesManager;
 public class TernAdapterFactory implements IAdapterFactory {
 
 	@Override
-	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
+	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		if (IProject.class.isAssignableFrom(adaptableObject.getClass()) && adapterType == ITernProject.class) {
 			try {
-				return (T) IDEResourcesManager.getInstance().getTernProject(adaptableObject, false);
+				return IDEResourcesManager.getInstance().getTernProject(adaptableObject, false);
 			} catch (IOException e) {
 				return null;
 			}

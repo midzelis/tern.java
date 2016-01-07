@@ -8,7 +8,7 @@ Bundle-Version: 1.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: tern.core
 Bundle-ClassPath: .
-Import-Package: com.eclipsesource.json;version="[0.9.4,0.9.5)",
+Import-Package: com.eclipsesource.json,
  javax.websocket;version="1.0.0",
  org.apache.http;version="4.1.4",
  org.apache.http.client;version="4.1.3",
