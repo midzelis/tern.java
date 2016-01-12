@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2013-2015 Angelo ZERR.
+ *  Copyright (c) 2013-2016 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tern.utils.StringUtils;
+
 class DirectivesByTagName {
 
 	private final Map<String, DirectiveAndSyntax> directivesMap;
@@ -26,16 +28,18 @@ class DirectivesByTagName {
 	}
 
 	public void addDirective(Directive directive) {
+		if (StringUtils.isEmpty(directive.getName())) {
+			// don't add directive if name is empty.
+			return;
+		}
 		directives.add(directive);
 		List<String> names = directive.getDirectiveNames();
 		for (int i = 0; i < names.size(); i++) {
-			directivesMap.put(names.get(i),
-					new DirectiveAndSyntax(directive, i));
+			directivesMap.put(names.get(i), new DirectiveAndSyntax(directive, i));
 		}
 	}
 
-	public void collectDirectives(String directiveName,
-			IDirectiveSyntax syntax, List<Directive> ignoreDirectives,
+	public void collectDirectives(String directiveName, IDirectiveSyntax syntax, List<Directive> ignoreDirectives,
 			Restriction restriction, IDirectiveCollector collector) {
 		String name = null;
 		for (Directive directive : directives) {
@@ -55,8 +59,7 @@ class DirectivesByTagName {
 
 	public Directive getDirective(String name, Restriction restriction) {
 		DirectiveAndSyntax directiveAndSyntax = directivesMap.get(name);
-		if (directiveAndSyntax != null
-				&& directiveAndSyntax.getDirective().isMatch(restriction)) {
+		if (directiveAndSyntax != null && directiveAndSyntax.getDirective().isMatch(restriction)) {
 			return directiveAndSyntax.getDirective();
 		}
 		return null;

@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2013-2015 Angelo ZERR.
+ *  Copyright (c) 2013-2016 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -14,16 +14,20 @@ import tern.server.protocol.IJSONObjectHelper;
 import tern.server.protocol.ITernResultProcessor;
 import tern.server.protocol.TernDoc;
 
+/**
+ * Tern outline result processor.
+ *
+ */
 public class TernOutlineResultProcessor implements ITernResultProcessor<ITernOutlineCollector> {
 
 	public static final TernOutlineResultProcessor INSTANCE = new TernOutlineResultProcessor();
 
-	private static final String OUTLINE_FIELD_NAME = "outline";
-	private static final String CHILDREN_FIELD_NAME = "children";
+	private static final String OUTLINE_FIELD_NAME = "outline"; // $NON-NLS-1$
+	private static final String CHILDREN_FIELD_NAME = "children"; // $NON-NLS-1$
 
 	@Override
 	public void process(TernDoc doc, IJSONObjectHelper helper, Object jsonObject, ITernOutlineCollector collector) {
-		Iterable<Object> outline = helper.getList(jsonObject, OUTLINE_FIELD_NAME); // $NON-NLS-1$
+		Iterable<Object> outline = helper.getList(jsonObject, OUTLINE_FIELD_NAME);
 		IJSNodeRoot root = collector.createRoot();
 		if (outline != null) {
 			addChildren(outline, root, collector, helper);

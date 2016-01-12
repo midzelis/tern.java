@@ -1,5 +1,5 @@
 /**
-- *  Copyright (c) 2013-2015 Angelo ZERR.
+- *  Copyright (c) 2013-2016 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -14,28 +14,21 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IPostSelectionProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.part.Page;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import tern.eclipse.ide.core.TernCorePlugin;
+import tern.eclipse.ide.core.resources.TernDocumentFile;
 import tern.eclipse.ide.internal.ui.Trace;
 import tern.eclipse.ide.internal.ui.views.actions.LinkEditorAction;
 import tern.eclipse.ide.internal.ui.views.actions.TerminateTernServerAction;
@@ -43,21 +36,28 @@ import tern.eclipse.ide.ui.utils.EditorUtils;
 import tern.server.ITernServer;
 import tern.server.ITernServerListener;
 import tern.server.protocol.outline.IJSNode;
+import tern.server.protocol.outline.TernOutlineCollector;
 
-public abstract class AbstractTernContentOutlinePage extends Page
-		implements IContentOutlinePage, ITernServerListener {
+/**
+ * Abstract class for tern outline page.
+ *
+ */
+public abstract class AbstractTernContentOutlinePage extends Page implements IContentOutlinePage, ITernServerListener {
 
 	private final AbstractTernOutlineView view;
-	private IFile currentFile;
+	private TernCommonViewer viewer;
 
-	public AbstractTernContentOutlinePage(AbstractTernOutlineView view) {
-		this.view = view;
-	}
-
-	private CommonViewer viewer;
-
+	// Commons actions
 	private LinkEditorAction toggleLinkingAction;
 	private TerminateTernServerAction terminateAction;
+
+	private final IProject project;
+	private TernDocumentFile ternFile;
+
+	public AbstractTernContentOutlinePage(IProject project, AbstractTernOutlineView view) {
+		this.project = project;
+		this.view = view;
+	}
 
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
@@ -81,7 +81,7 @@ public abstract class AbstractTernContentOutlinePage extends Page
 
 	@Override
 	public Control getControl() {
-		return this.viewer.getControl();
+		return this.viewer != null ? this.viewer.getControl() : null;
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public abstract class AbstractTernContentOutlinePage extends Page
 
 	@Override
 	public void createControl(Composite parent) {
-		viewer = new CommonViewer(getViewerId(), parent, SWT.MULTI);
+		viewer = new TernCommonViewer(getViewerId(), parent, SWT.MULTI, this);
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
@@ -99,32 +99,33 @@ public abstract class AbstractTernContentOutlinePage extends Page
 				if (!selection.isEmpty()) {
 					if (selection.getFirstElement() instanceof IJSNode) {
 						IJSNode node = (IJSNode) selection.getFirstElement();
-						IFile file = getFile();
-						if (file != null) {
-							EditorUtils.openInEditor(node, file);
-						} else {
-							EditorUtils.openInEditor(node);
-						}
+						view.openInEditor(node, true);
 					}
 				}
 			}
+
 		});
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				updateEnabledActions();
+				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				if (!selection.isEmpty()) {
+					if (selection.getFirstElement() instanceof IJSNode) {
+						IJSNode node = (IJSNode) selection.getFirstElement();
+						view.openInEditor(node, false);
+					}
+				}
 			}
 
 		});
-		viewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
+		// viewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
 
 		// Actions
 		registerActions(getSite().getActionBars().getToolBarManager());
 		registerContextMenu(viewer.getControl());
 
-		// Viewer
-		init(viewer);
 		try {
 			IProject project = getProject();
 			TernCorePlugin.getTernProject(project).addServerListener(this);
@@ -145,7 +146,7 @@ public abstract class AbstractTernContentOutlinePage extends Page
 	protected void registerContextMenu(Control control) {
 	}
 
-	public CommonViewer getViewer() {
+	public TernCommonViewer getViewer() {
 		return viewer;
 	}
 
@@ -155,6 +156,7 @@ public abstract class AbstractTernContentOutlinePage extends Page
 
 	@Override
 	public void onStart(ITernServer server) {
+		refreshOutline();
 		terminateAction.setEnabled(true);
 	}
 
@@ -165,7 +167,7 @@ public abstract class AbstractTernContentOutlinePage extends Page
 
 	@Override
 	public void dispose() {
-		super.dispose();		
+		super.dispose();
 		try {
 			IProject project = getProject();
 			TernCorePlugin.getTernProject(project).removeServerListener(this);
@@ -174,20 +176,41 @@ public abstract class AbstractTernContentOutlinePage extends Page
 		}
 	}
 
-	public void setCurrentFile(IFile file) {
-		this.currentFile = file;
-	}
-
-	public IFile getCurrentFile() {
-		return currentFile;
+	public void setCurrentFile(IFile currentFile) {
+		this.ternFile = new TernDocumentFile(currentFile, EditorUtils.getDocument(currentFile));
+		CommonViewer viewer = getViewer();
+		viewer.setInput(ternFile);
 	}
 
 	protected abstract String getViewerId();
 
-	protected abstract void init(CommonViewer viewer);
+	public final IFile getCurrentFile() {
+		return ternFile.getFile();
+	}
 
-	public abstract IProject getProject();
+	public TernDocumentFile getTernFile() {
+		return ternFile;
+	}
 
-	protected abstract IFile getFile();
+	public final IProject getProject() {
+		return project;
+	}
+
+	public abstract IFile getFile();
+
+	public boolean isParsed() {
+		return view.isParsed();
+	}
+
+	/**
+	 * Refresh the outline tree in a job.
+	 */
+	public void refreshOutline() {
+		view.refreshOutline();
+	}
+
+	public TernOutlineCollector getOutline() {
+		return view.getOutline();
+	}
 
 }

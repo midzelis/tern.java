@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2013-2015 Angelo ZERR.
+ *  Copyright (c) 2013-2016 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -34,8 +34,8 @@ public class TernOutlineCollector implements ITernOutlineCollector {
 	}
 
 	@Override
-	public IJSNode createNode(String name, String type, String kind, String value, Long start, Long end, String file, IJSNode parent,
-			Object jsonNode, IJSONObjectHelper helper) {
+	public IJSNode createNode(String name, String type, String kind, String value, Long start, Long end, String file,
+			IJSNode parent, Object jsonNode, IJSONObjectHelper helper) {
 		return new JSNode(name, type, kind, value, start, end, file, parent);
 	}
 
@@ -46,4 +46,5 @@ public class TernOutlineCollector implements ITernOutlineCollector {
 	public ITernProject getTernProject() {
 		return ternProject;
 	}
+
 }

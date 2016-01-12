@@ -1,5 +1,5 @@
 /**
-- *  Copyright (c) 2013-2015 Angelo ZERR.
+- *  Copyright (c) 2013-2016 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -13,9 +13,7 @@ package tern.eclipse.ide.internal.ui.views;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.ui.navigator.CommonViewer;
 
-import tern.eclipse.ide.core.resources.TernDocumentFile;
 import tern.eclipse.ide.internal.ui.views.actions.LexicalSortingAction;
 import tern.eclipse.ide.ui.TernUIPlugin;
 import tern.eclipse.ide.ui.views.AbstractTernContentOutlinePage;
@@ -27,12 +25,10 @@ import tern.eclipse.ide.ui.views.AbstractTernContentOutlinePage;
  */
 public class TernContentOutlinePage extends AbstractTernContentOutlinePage {
 
-	private final TernDocumentFile ternFile;
 	private LexicalSortingAction sortAction;
 
-	public TernContentOutlinePage(TernDocumentFile ternFile, TernOutlineView view) {
-		super(view);
-		this.ternFile = ternFile;
+	public TernContentOutlinePage(IProject project, TernOutlineView view) {
+		super(project, view);
 	}
 
 	@Override
@@ -41,18 +37,8 @@ public class TernContentOutlinePage extends AbstractTernContentOutlinePage {
 	}
 
 	@Override
-	protected IFile getFile() {
-		return ternFile.getFile();
-	}
-
-	@Override
-	public IProject getProject() {
-		return getFile().getProject();
-	}
-
-	@Override
-	protected void init(CommonViewer viewer) {
-		viewer.setInput(ternFile);
+	public IFile getFile() {
+		return getCurrentFile();
 	}
 
 	@Override
@@ -61,4 +47,5 @@ public class TernContentOutlinePage extends AbstractTernContentOutlinePage {
 		manager.add(sortAction);
 		super.registerActions(manager);
 	}
+
 }

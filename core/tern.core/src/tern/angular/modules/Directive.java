@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2013-2015 Angelo ZERR.
+ *  Copyright (c) 2013-2016 Angelo ZERR.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -23,7 +23,7 @@ import tern.utils.StringUtils;
 /**
  * Angular directive.
  */
-public class Directive extends AbstractAngularElement {
+public class Directive extends AngularElement {
 
 	private final String url;
 	private final String restrict;
