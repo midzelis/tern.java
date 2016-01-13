@@ -337,5 +337,20 @@
             label="Tern">
       </keyword>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="tern.eclipse.ide.internal.ui.editors.TernJavascriptEditor"
+            contributorClass="org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditorActionContributor"
+            default="false"
+            extensions="js"
+            id="tern.eclipse.ide.ui.ternJavascriptEditor"
+            name="Tern Javascript Editor"
+            symbolicFontName="org.eclipse.wst.jsdt.ui.editors.textfont">
+         <contentTypeBinding
+               contentTypeId="org.eclipse.wst.jsdt.core.jsSource">
+         </contentTypeBinding>
+      </editor>
+   </extension>
    
 </plugin>        

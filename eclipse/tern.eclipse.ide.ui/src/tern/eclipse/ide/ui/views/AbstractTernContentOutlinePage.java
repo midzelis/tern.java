@@ -136,6 +136,9 @@ public abstract class AbstractTernContentOutlinePage extends Page
 	}
 
 	protected void registerActions(IToolBarManager manager) {
+		if(view == null){
+			return;
+		}
 		this.toggleLinkingAction = new LinkEditorAction(view, getViewer());
 		manager.add(toggleLinkingAction);
 		this.terminateAction = new TerminateTernServerAction(this);
