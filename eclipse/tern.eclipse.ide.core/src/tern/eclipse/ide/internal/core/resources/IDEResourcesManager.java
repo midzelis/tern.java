@@ -43,6 +43,10 @@ public class IDEResourcesManager implements ITernResourcesManagerDelegate {
 			throws IOException {
 		if (obj instanceof IProject) {
 			IProject project = (IProject) obj;
+			IProject alternative = IDETernProject.getAlternative(project);
+			if (alternative!=null) {
+				project = alternative;
+			}
 			try {
 				if (!IDETernProject.hasTernNature(project) && !force) {
 					return null;

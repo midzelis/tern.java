@@ -32,4 +32,9 @@ public class DefaultTernNatureAdapter implements ITernNatureCapability {
 		return project != null && project.hasNature( this.natureId );
 	}
 
+	@Override
+	public IProject getAlternative(IProject project) throws CoreException {
+		return null;
+	}
+
 }

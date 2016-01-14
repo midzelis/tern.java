@@ -20,6 +20,8 @@ import org.eclipse.core.runtime.CoreException;
  */
 public interface ITernNatureCapability {
 
+	IProject getAlternative( IProject project ) throws CoreException;
+	
 	boolean hasTernNature( IProject project ) throws CoreException;
 
 }
