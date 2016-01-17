@@ -71,7 +71,7 @@ public class HTMLTernPrinter {
 
 	public static void addGuessContent(StringBuffer buffer, Boolean guess) {
 		if (guess != null) {
-			addDefinitionListItem(buffer, "Guess?", guess.toString());
+			addDefinitionListItem(buffer, "Was guessed by TernJS", guess.toString());
 		}
 	}
 

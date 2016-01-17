@@ -10,6 +10,8 @@
  */
 package tern.eclipse.ide.ui.hover;
 
+import org.eclipse.jface.internal.text.html.BrowserInformationControl;
+
 import tern.eclipse.jface.text.HoverLocationListener;
 import tern.eclipse.jface.text.PresenterControlCreator;
 import tern.eclipse.jface.text.TernBrowserInformationControl;
@@ -28,8 +30,8 @@ public class IDEPresenterControlCreator extends PresenterControlCreator {
 
 	@Override
 	protected void addLinkListener(TernBrowserInformationControl control) {
-		HoverLocationListener.addLinkListener(control,
-				new IDEHoverLocationListener(control, provider));
+		final BrowserInformationControl control1 = control;
+		control1.addLocationListener(new IDEHoverLocationListener(control, provider));
 
 	}
 }

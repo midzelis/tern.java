@@ -52,7 +52,7 @@ public class TernCompletionProposalComputer implements
 		return computeCompletionProposals(context);
 	}
 	
-	private List<?> computeCompletionProposals(Object context) {
+	private List<ICompletionProposal> computeCompletionProposals(Object context) {
 		TernContext ternContext = JSDTTernUIPlugin.getContextProvider().getTernContext(context);
 		if (ternContext != null) {
 			try {
@@ -78,7 +78,7 @@ public class TernCompletionProposalComputer implements
 						"Error while JSDT Tern completion.", e);
 			}
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	@Override

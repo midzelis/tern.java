@@ -314,10 +314,19 @@
       </viewerContentBinding>
    </extension>
 
+	<extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="tern.eclipse.ide.tern"
+            label="Tern">
+      </keyword>
+   </extension>
+   
 	<!--======================================================================================-->
 	<!-- .tern-project editor						             -->
 	<!--======================================================================================-->
-        
+   
+   <!--
    <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -330,13 +339,7 @@
             <contentTypeBinding contentTypeId="tern.eclipse.ide.core.ternProject"/>            
       </editor>
    </extension>
-   <extension
-         point="org.eclipse.ui.keywords">
-      <keyword
-            id="tern.eclipse.ide.tern"
-            label="Tern">
-      </keyword>
-   </extension>
+  
    <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -353,5 +356,5 @@
          </contentTypeBinding>
       </editor>
    </extension>
-   
+   -->
 </plugin>        

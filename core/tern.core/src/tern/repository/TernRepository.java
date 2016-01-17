@@ -94,7 +94,7 @@ public class TernRepository implements ITernRepository {
 		}
 	}
 
-	private void intializeIfNeeded() throws TernException {
+	private synchronized void intializeIfNeeded() throws TernException {
 		if (modules == null) {
 			Map<String, ITernModule> modules = new HashMap<String, ITernModule>();
 			Map<String, ITernModule> modulesByOrigin = new HashMap<String, ITernModule>();

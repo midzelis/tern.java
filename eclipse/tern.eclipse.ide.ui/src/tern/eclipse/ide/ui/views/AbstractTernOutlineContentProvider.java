@@ -47,7 +47,7 @@ public abstract class AbstractTernOutlineContentProvider implements ITreeContent
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				parsed = false;
-				Display.getDefault().syncExec(new Runnable() {
+				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
 						viewer.refresh();
@@ -57,7 +57,7 @@ public abstract class AbstractTernOutlineContentProvider implements ITreeContent
 					outline = loadOutline();
 					if (outline != null) {
 						parsed = true;
-						Display.getDefault().syncExec(new Runnable() {
+						Display.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
 								Control refreshControl = viewer.getControl();

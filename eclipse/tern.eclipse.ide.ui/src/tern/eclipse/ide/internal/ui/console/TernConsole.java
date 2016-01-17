@@ -128,16 +128,7 @@ public class TernConsole extends MessageConsole implements ITernConsole {
 
 	@Override
 	public void doAppendLine(final LineType lineType, final String line) {
-		Job appendJob = new Job(TernUIMessages.TernConsoleJob_name) {
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				internalDoAppendLine(lineType, line);
-				return Status.OK_STATUS;
-			}
-		};
-		appendJob.setPriority(Job.LONG);
-		appendJob.schedule();
+		internalDoAppendLine(lineType, line);		
 	}
 
 	private void internalDoAppendLine(LineType lineType, String line) {

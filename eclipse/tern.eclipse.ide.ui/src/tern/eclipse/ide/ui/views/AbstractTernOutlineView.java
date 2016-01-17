@@ -74,7 +74,7 @@ public abstract class AbstractTernOutlineView extends ContentOutline implements 
 			if (bestNode != null) {
 				final IJSNode node = bestNode.node;
 				final CommonViewer viewer = bestNode.viewer;
-				Display.getDefault().syncExec(new Runnable() {
+				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
 						viewer.setSelection(new StructuredSelection(node));
