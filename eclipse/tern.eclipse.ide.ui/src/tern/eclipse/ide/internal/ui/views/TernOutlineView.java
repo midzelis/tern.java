@@ -34,11 +34,8 @@ public class TernOutlineView extends AbstractTernOutlineView {
 
 	@Override
 	protected IContentOutlinePage createOutlinePage(IWorkbenchPart part, IFile file) {
-		IDocument document = EditorUtils.getDocument(file);
-		if (document != null) {
-			TernContentOutlinePage page = new TernContentOutlinePage(new TernDocumentFile(file, document), this);
-			return page;
-		}
-		return null;
+		TernContentOutlinePage page = new TernContentOutlinePage(this);
+		page.setCurrentFile(file);
+		return page;
 	}
 }

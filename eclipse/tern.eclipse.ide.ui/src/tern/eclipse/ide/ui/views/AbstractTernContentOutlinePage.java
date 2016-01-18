@@ -53,8 +53,7 @@ public abstract class AbstractTernContentOutlinePage extends Page
 	public AbstractTernContentOutlinePage(AbstractTernOutlineView view) {
 		this.view = view;
 	}
-
-	private CommonViewer viewer;
+	protected CommonViewer viewer;
 
 	private LinkEditorAction toggleLinkingAction;
 	private TerminateTernServerAction terminateAction;

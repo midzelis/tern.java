@@ -25,8 +25,8 @@ public class TernJavascriptEditor extends CompilationUnitEditor {
 	public Object getAdapter(Class required) {
 		if (IContentOutlinePage.class.equals(required)) {
 			IFile file = EditorUtils.getFile(this);
-			IDocument document = EditorUtils.getDocument(file);
-			TernContentOutlinePage page = new TernContentOutlinePage(new TernDocumentFile(file, document), null);
+			TernContentOutlinePage page = new TernContentOutlinePage( null);
+			page.setCurrentFile(file);
 			return page;
 		}
 		

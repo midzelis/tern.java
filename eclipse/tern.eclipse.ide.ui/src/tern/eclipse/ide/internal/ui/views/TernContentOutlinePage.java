@@ -18,6 +18,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 import tern.eclipse.ide.core.resources.TernDocumentFile;
 import tern.eclipse.ide.internal.ui.views.actions.LexicalSortingAction;
 import tern.eclipse.ide.ui.TernUIPlugin;
+import tern.eclipse.ide.ui.utils.EditorUtils;
 import tern.eclipse.ide.ui.views.AbstractTernContentOutlinePage;
 
 /**
@@ -27,12 +28,19 @@ import tern.eclipse.ide.ui.views.AbstractTernContentOutlinePage;
  */
 public class TernContentOutlinePage extends AbstractTernContentOutlinePage {
 
-	private final TernDocumentFile ternFile;
+	private TernDocumentFile ternFile;
 	private LexicalSortingAction sortAction;
 
-	public TernContentOutlinePage(TernDocumentFile ternFile, TernOutlineView view) {
+	public TernContentOutlinePage(TernOutlineView view) {
 		super(view);
-		this.ternFile = ternFile;
+	}
+
+	@Override
+	public void setCurrentFile(IFile file) {
+		super.setCurrentFile(file);
+		ternFile = new TernDocumentFile(file, EditorUtils.getDocument(file));
+		if (viewer!=null)
+			viewer.setInput(ternFile);
 	}
 
 	@Override
