@@ -21,5 +21,5 @@ Export-Package: tern.eclipse.ide.core,
  tern.eclipse.ide.core.utils
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: tern.eclipse.ide.core.TernCorePlugin
-Import-Package: com.eclipsesource.json,
+Import-Package: com.eclipsesource.json;version="0.9.4",
  minimatch;version="1.1.0"
