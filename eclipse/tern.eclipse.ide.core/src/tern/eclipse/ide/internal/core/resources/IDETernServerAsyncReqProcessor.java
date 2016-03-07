@@ -103,6 +103,14 @@ public class IDETernServerAsyncReqProcessor extends Job implements
 			monitor.beginTask("", IProgressMonitor.UNKNOWN); //$NON-NLS-1$
 			TernResultsProcessorsFactory.makeRequestAndProcess(doc, server,
 					collector);
+		} catch(TernException e) {
+			if ("TernError: No type found at the given position.".equals(e.getMessage())) {
+				// ignore this
+		
+			} else {
+			TernCorePlugin.getDefault().getLog()
+					.log(new Status(IStatus.ERROR, TernCorePlugin.PLUGIN_ID, e.getMessage(), e));
+			}
 		} catch (Throwable e) {
 			TernCorePlugin
 					.getDefault()
