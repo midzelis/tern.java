@@ -220,6 +220,24 @@ public class TernNatureAdaptersManager implements IRegistryChangeListener {
 		}
 		return false;
 	}
+	public IProject getAlternative(IProject project) {
+		if (project.isAccessible()) {
+			try {
+
+				// use tern nature adapaters
+				Map<ITernNatureCapability, List<DefaultTernModule>> ternNatureAdapters = getTernNatureAdapters();
+				for (ITernNatureCapability natureAdapter : ternNatureAdapters
+						.keySet()) {
+					if (natureAdapter.getAlternative(project)!=null) {
+						return natureAdapter.getAlternative(project);
+					}
+				}
+			} catch (CoreException e) {
+				Trace.trace(Trace.SEVERE, "Error tern nature", e);
+			}
+		}
+		return null;
+	}
 
 	private Map<ITernNatureCapability, List<DefaultTernModule>> getTernNatureAdapters() {
 		if (ternNatureAdapters == null) {
@@ -340,5 +358,7 @@ public class TernNatureAdaptersManager implements IRegistryChangeListener {
 		return TernCorePlugin.getTernRepositoryManager().getTernModules(
 				moduleNames, ternProject);
 	}
+
+
 
 }

@@ -143,10 +143,12 @@ public abstract class AbstractTernContentOutlinePage extends Page
 	}
 
 	protected void registerActions(IToolBarManager manager) {
-		this.toggleLinkingAction = new LinkEditorAction(view, getViewer());
-		manager.add(toggleLinkingAction);
-		this.terminateAction = new TerminateTernServerAction(this);
-		manager.add(terminateAction);
+		if(view != null){
+			this.toggleLinkingAction = new LinkEditorAction(view, getViewer());
+			manager.add(toggleLinkingAction);
+			this.terminateAction = new TerminateTernServerAction(this);
+			manager.add(terminateAction);
+		}
 	}
 
 	protected void registerContextMenu(Control control) {
@@ -162,13 +164,18 @@ public abstract class AbstractTernContentOutlinePage extends Page
 
 	@Override
 	public void onStart(ITernServer server) {
+
 		refreshOutline();
-		terminateAction.setEnabled(true);
+		if(view != null){
+			terminateAction.setEnabled(true);	
+		}
 	}
 
 	@Override
 	public void onStop(ITernServer server) {
-		terminateAction.setEnabled(false);
+		if(view != null){
+			terminateAction.setEnabled(false);
+		}
 	}
 
 	@Override

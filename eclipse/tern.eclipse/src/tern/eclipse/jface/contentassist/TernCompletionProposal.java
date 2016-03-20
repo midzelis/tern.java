@@ -54,7 +54,7 @@ public class TernCompletionProposal extends TernCompletionItem implements
 	private boolean fUpdateLengthOnValidate;
 	private String fAlternateMatch;
 	private char[] fTriggers;
-	private IInformationControlCreator ternControlCreator;
+	protected IInformationControlCreator ternControlCreator;
 
 	public TernCompletionProposal(TernCompletionProposalRec proposal) {
 		super(proposal);

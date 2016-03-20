@@ -27,6 +27,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 import tern.eclipse.ide.core.IIDETernProject;
 import tern.eclipse.ide.core.TernCorePlugin;
+import tern.eclipse.ide.internal.core.resources.IDETernProject;
 import tern.eclipse.ide.internal.ui.Trace;
 import tern.eclipse.ide.internal.ui.hyperlink.TernHyperlink;
 import tern.eclipse.ide.ui.JavaWordFinder;
@@ -50,6 +51,10 @@ public class TernHyperLinkDetector extends AbstractHyperlinkDetector {
 			return null;
 		}
 		IProject project = resource.getProject();
+		IProject alt = TernCorePlugin.getAlternative(project);
+		if (alt!=null) {
+			project = alt;
+		}
 		if (TernCorePlugin.hasTernNature(project)) {
 			// the project of the resource has tern nature, execute tern
 			// hyperlink.

@@ -106,7 +106,7 @@ public class TernUIPlugin extends AbstractUIPlugin {
 			return null;
 		}
 		TernConsole console = TernConsole.getOrCreateConsole(project);
-		TernConsoleHelper.showConsole(console);
+		TernConsoleHelper.ensureConsole(console);
 		return console;
 	}
 

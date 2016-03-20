@@ -10,9 +10,15 @@
  */
 package tern.eclipse.ide.jsdt.internal.ui.contentassist;
 
+import org.eclipse.jface.internal.text.html.BrowserInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wst.jsdt.ui.text.java.IJavaCompletionProposal;
 
 import tern.eclipse.ide.ui.contentassist.JSTernCompletionProposal;
+import tern.eclipse.ide.ui.hover.IDEHoverControlCreator;
+import tern.eclipse.ide.ui.hover.IDEPresenterControlCreator;
+import tern.eclipse.ide.ui.hover.TernHover;
 import tern.server.protocol.completions.TernCompletionProposalRec;
 
 /**
@@ -32,6 +38,19 @@ public class JSDTTernCompletionProposal extends JSTernCompletionProposal
 	public int getRelevance() {
 		// TODO : compute relevance switch type?
 		return JSDTTernCompletionCollector.TERN_RELEVANT;
+	}
+	
+	@Override
+	public IInformationControlCreator getInformationControlCreator() {
+		Shell shell = getActiveWorkbenchShell();
+		if (shell == null || !BrowserInformationControl.isAvailable(shell))
+			return null;
+
+		if (ternControlCreator == null) {
+			TernHover h = new TernHover();
+			ternControlCreator = h.getHoverControlCreator();
+		}
+		return ternControlCreator;
 	}
 
 }

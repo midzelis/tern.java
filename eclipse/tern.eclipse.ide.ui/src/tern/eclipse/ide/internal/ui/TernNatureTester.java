@@ -50,6 +50,10 @@ public class TernNatureTester extends
 		if (receiver instanceof IAdaptable) {
 			IProject project = (IProject) ((IAdaptable) receiver)
 					.getAdapter(IProject.class);
+			IProject alt = TernCorePlugin.getAlternative(project);
+			if (alt!=null) {
+				project=alt;
+			}
 			if (project != null) {
 				return TernCorePlugin.hasTernNature(project);
 			}

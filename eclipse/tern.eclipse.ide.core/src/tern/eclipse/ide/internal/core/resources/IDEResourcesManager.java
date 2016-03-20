@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 import tern.ITernFile;
@@ -43,6 +44,10 @@ public class IDEResourcesManager implements ITernResourcesManagerDelegate {
 			throws IOException {
 		if (obj instanceof IProject) {
 			IProject project = (IProject) obj;
+			IProject alt = IDETernProject.getAlternative(project);
+			if (alt!=null) {
+				project=alt;
+			}
 			try {
 				if (!IDETernProject.hasTernNature(project) && !force) {
 					return null;
@@ -89,9 +94,18 @@ public class IDEResourcesManager implements ITernResourcesManagerDelegate {
 					.getFile(
 							new Path(name.substring(ITernFile.PROJECT_PROTOCOL
 									.length() + 1)));
+		} else if (name.startsWith("project:")) {
+			// TODO: find out why there is a missing /
+			file = ResourcesPlugin
+					.getWorkspace()
+					.getRoot()
+					.getFile(
+							new Path(name.substring("project:"
+									.length() + 1)));
 		} else {
-			IProject ip = (IProject) project.getAdapter(IProject.class);
-			file = ip.getFile(name);
+			IPath projectDir = new Path(project.getProjectDir().toString());
+			IPath path = projectDir.append(name);
+			file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
 		}
 		return getTernFile(file);
 	}

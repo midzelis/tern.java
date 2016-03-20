@@ -195,7 +195,10 @@ public class IDETernProject extends TernProject implements IIDETernProject, ITer
 	public static boolean hasTernNature(IProject project) {
 		return TernNatureAdaptersManager.getManager().hasTernNature(project);
 	}
-
+	public static IProject getAlternative(IProject project) {
+		return TernNatureAdaptersManager.getManager().getAlternative(project);
+	}
+	
 	@Override
 	protected void doLoad() throws IOException {
 		try {

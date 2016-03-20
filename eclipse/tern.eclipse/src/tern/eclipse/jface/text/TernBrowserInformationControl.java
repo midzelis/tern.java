@@ -36,5 +36,6 @@ public class TernBrowserInformationControl extends BrowserInformationControl {
 		}
 		return super.getInformationPresenterControlCreator();
 	}
+	
 
 }

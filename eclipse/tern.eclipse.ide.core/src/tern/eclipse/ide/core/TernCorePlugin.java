@@ -114,6 +114,10 @@ public class TernCorePlugin extends Plugin {
 	public static boolean hasTernNature(IProject project) {
 		return IDETernProject.hasTernNature(project);
 	}
+	
+	public static IProject getAlternative(IProject project) {
+		return IDETernProject.getAlternative(project);
+	}
 
 	/**
 	 * Returns the tern project of the given eclipse project and throws
@@ -159,6 +163,18 @@ public class TernCorePlugin extends Plugin {
 		}
 		return result;
 	}
+	public static IIDETernProject getAlternate(IProject project)
+			throws CoreException {
+		IIDETernProject result = (IIDETernProject) TernResourcesManager
+				.getTernProject(project);
+		if (result == null) {
+			throw new CoreException(new Status(IStatus.ERROR,
+					TernCorePlugin.PLUGIN_ID, "The project "
+							+ project.getName() + " is not a tern project."));
+		}
+		return result;
+	}
+	
 
 	/**
 	 * Returns the shared instance

@@ -97,30 +97,59 @@
        point="org.eclipse.ui.preferencePages">  
        <!-- Tern Global preferences page -->  
        <page
-              name="%TernPreferencePage.name"
-              class="tern.eclipse.ide.internal.ui.preferences.TernGlobalPreferencesPage"
-              id="tern.eclipse.ide.preferences"
-              category="org.eclipse.wst.jsdt.ui.preferences.JavaBasePreferencePage" />
-       <page  name="%TernContentAssistPropertyPage.name"
-              category="tern.eclipse.ide.preferences"
-              class="tern.eclipse.ide.internal.ui.preferences.TernContentAssistPreferencesPage"
-              id="tern.eclipse.ide.ui.preferences.contentassist" />                        
-       <page  name="%TernDevelopmentPropertyPage.name"
-              category="tern.eclipse.ide.preferences"
-              class="tern.eclipse.ide.internal.ui.preferences.TernDevelopmentPreferencesPage"
-              id="tern.eclipse.ide.ui.preferences.development" />
-       <page  name="%TernRepositoryPropertyPage.name"
-              category="tern.eclipse.ide.ui.preferences.development"
-              class="tern.eclipse.ide.internal.ui.preferences.TernRepositoryPreferencesPage"
-              id="tern.eclipse.ide.ui.preferences.repository" />
-       <page  name="%TernServerPropertyPage.name"
-              category="tern.eclipse.ide.preferences"
-              class="tern.eclipse.ide.internal.ui.preferences.TernServerPreferencesPage"
-              id="tern.eclipse.ide.ui.preferences.server" />              
-       <page  name="%TernValidationPropertyPage.name"
-              category="tern.eclipse.ide.preferences"
-              class="tern.eclipse.ide.internal.ui.preferences.TernValidationPreferencesPage"
-              id="tern.eclipse.ide.ui.preferences.validation" />
+             category="org.eclipse.wst.jsdt.ui.preferences.JavaBasePreferencePage"
+             class="tern.eclipse.ide.internal.ui.preferences.TernGlobalPreferencesPage"
+             id="tern.eclipse.ide.preferences"
+             name="%TernPreferencePage.name">
+          <keywordReference
+                id="tern.eclipse.ide.ui_tern">
+          </keywordReference>
+       </page>
+       <page
+             category="tern.eclipse.ide.preferences"
+             class="tern.eclipse.ide.internal.ui.preferences.TernContentAssistPreferencesPage"
+             id="tern.eclipse.ide.ui.preferences.contentassist"
+             name="%TernContentAssistPropertyPage.name">
+          <keywordReference
+                id="tern.eclipse.ide.ui_tern">
+          </keywordReference>
+       </page>                        
+       <page
+             category="tern.eclipse.ide.preferences"
+             class="tern.eclipse.ide.internal.ui.preferences.TernDevelopmentPreferencesPage"
+             id="tern.eclipse.ide.ui.preferences.development"
+             name="%TernDevelopmentPropertyPage.name">
+          <keywordReference
+                id="tern.eclipse.ide.ui_tern">
+          </keywordReference>
+       </page>
+       <page
+             category="tern.eclipse.ide.ui.preferences.development"
+             class="tern.eclipse.ide.internal.ui.preferences.TernRepositoryPreferencesPage"
+             id="tern.eclipse.ide.ui.preferences.repository"
+             name="%TernRepositoryPropertyPage.name">
+          <keywordReference
+                id="tern.eclipse.ide.ui_tern">
+          </keywordReference>
+       </page>
+       <page
+             category="tern.eclipse.ide.preferences"
+             class="tern.eclipse.ide.internal.ui.preferences.TernServerPreferencesPage"
+             id="tern.eclipse.ide.ui.preferences.server"
+             name="%TernServerPropertyPage.name">
+          <keywordReference
+                id="tern.eclipse.ide.ui_tern">
+          </keywordReference>
+       </page>              
+       <page
+             category="tern.eclipse.ide.preferences"
+             class="tern.eclipse.ide.internal.ui.preferences.TernValidationPreferencesPage"
+             id="tern.eclipse.ide.ui.preferences.validation"
+             name="%TernValidationPropertyPage.name">
+          <keywordReference
+                id="tern.eclipse.ide.ui_tern">
+          </keywordReference>
+       </page>
     </extension>
 
     <extension
@@ -135,6 +164,9 @@
                   <test property="tern.eclipse.ide.ui.isTernProject" />
              </adapt>         
          </enabledWhen>
+         <keywordReference
+               id="tern.eclipse.ide.ui_tern">
+         </keywordReference>
       </page>
       <page
             name="%TernContentAssistPropertyPage.name"
@@ -146,6 +178,9 @@
                   <test property="tern.eclipse.ide.ui.isTernProject" />
              </adapt>         
          </enabledWhen>
+         <keywordReference
+               id="tern.eclipse.ide.ui_tern">
+         </keywordReference>
       </page>          
       <page
             name="%TernModulesPropertyPage.name"
@@ -157,6 +192,9 @@
                   <test property="tern.eclipse.ide.ui.isTernProject" />
              </adapt>         
          </enabledWhen>
+         <keywordReference
+               id="tern.eclipse.ide.ui_tern">
+         </keywordReference>
       </page>     
       <page
             name="%TernScriptPathsPropertyPage.name"
@@ -168,6 +206,9 @@
                   <test property="tern.eclipse.ide.ui.isTernProject" />
              </adapt>         
          </enabledWhen>
+         <keywordReference
+               id="tern.eclipse.ide.ui_tern">
+         </keywordReference>
       </page>
       <page
             name="%TernDevelopmentPropertyPage.name"
@@ -177,8 +218,11 @@
          <enabledWhen>
              <adapt type="org.eclipse.core.resources.IProject">
                   <test property="tern.eclipse.ide.ui.isTernProject" />
-             </adapt>         
+             </adapt>   
          </enabledWhen>
+         <keywordReference
+	               id="tern.eclipse.ide.ui_tern">
+	     </keywordReference>
       </page>
       <page
             name="%TernRepositoryPropertyPage.name"
@@ -188,8 +232,11 @@
          <enabledWhen>
              <adapt type="org.eclipse.core.resources.IProject">
                   <test property="tern.eclipse.ide.ui.isTernProject" />
-             </adapt>         
+             </adapt>
          </enabledWhen>
+         <keywordReference
+	               id="tern.eclipse.ide.ui_tern">
+	     </keywordReference>
       </page>      
       <page
             name="%TernValidationPropertyPage.name"
@@ -201,6 +248,9 @@
                   <test property="tern.eclipse.ide.ui.isTernProject" />
              </adapt>         
          </enabledWhen>
+         <keywordReference
+	         id="tern.eclipse.ide.ui_tern">
+	     </keywordReference>
       </page>
     </extension>
      
@@ -300,6 +350,13 @@
             id="tern.eclipse.ide.ui.editors.TernProjectEditor">
             <contentTypeBinding contentTypeId="tern.eclipse.ide.core.ternProject"/>            
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="tern.eclipse.ide.ui_tern"
+            label="Tern">
+      </keyword>
    </extension>
    
 </plugin>        

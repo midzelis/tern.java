@@ -86,7 +86,7 @@ public class Trace {
 			}
 		}
 
-		if (!TernCorePlugin.getDefault().isDebugging())
+		if (TernCorePlugin.getDefault() ==null || !TernCorePlugin.getDefault().isDebugging())
 			return;
 
 		StringBuilder sb = new StringBuilder(TernCorePlugin.PLUGIN_ID);

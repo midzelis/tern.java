@@ -53,7 +53,7 @@ public class TernFileSynchronizer implements ITernFileSynchronizer {
 	// wait 200ms for uploader to finish
 	private static final int TIMEOUT = 200;
 
-	// allow to upload maximum 12MB
+	// allow to upload maximum 512MB
 	private static final int MAX_ALLOWED_SIZE = 12 * 1024 * 1024;
 
 	private final ITernProject project;
@@ -185,8 +185,10 @@ public class TernFileSynchronizer implements ITernFileSynchronizer {
 				for (ITernScriptResource resource : path.getScriptResources()) {
 					// limit the size of content being sent to the Tern server
 					if (totalSize >= MAX_ALLOWED_SIZE) {
-						sizeExceeded();
-						break;
+						
+						sendFiles(doc);
+						totalSize = 0;
+						doc = new TernDoc();
 					}
 					ITernFile file = resource.getFile();
 					if (file == null) {
@@ -199,6 +201,7 @@ public class TernFileSynchronizer implements ITernFileSynchronizer {
 							TernFile tf = file.toTernServerFile(getProject());
 							doc.addFile(tf);
 							synced.add(name);
+							System.out.println(name);
 							totalSize += tf.getText().length();
 						} catch (IOException e) {
 							getProject().handleException(e);

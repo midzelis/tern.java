@@ -18,6 +18,7 @@ import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.IInformationControlExtension4;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.editors.text.EditorsUI;
 
 public class HoverControlCreator extends
 		AbstractReusableInformationControlCreator {
@@ -62,25 +63,20 @@ public class HoverControlCreator extends
 	 */
 	@Override
 	public IInformationControl doCreateInformationControl(Shell parent) {
-		String tooltipAffordanceString = "Press F2 for focus";
 		if (BrowserInformationControl.isAvailable(parent)) {
 			String font = JFaceResources.DIALOG_FONT;
-			BrowserInformationControl iControl = new BrowserInformationControl(
-					parent, font, tooltipAffordanceString) {
-				/*
-				 * @see org.eclipse.jface.text.IInformationControlExtension5#
-				 * getInformationPresenterControlCreator()
-				 */
-				@Override
+			
+			BrowserInformationControl browserInformationControl = new BrowserInformationControl(parent, font, true) {
 				public IInformationControlCreator getInformationPresenterControlCreator() {
 					return fInformationPresenterControlCreator;
 				}
 			};
-			addLinkListener(iControl);
-			return iControl;
+			browserInformationControl.setStatusText(EditorsUI.getTooltipAffordanceString());
+			addLinkListener(browserInformationControl);
+			return browserInformationControl;
 		} else {
 			return new DefaultInformationControl(parent,
-					tooltipAffordanceString);
+					EditorsUI.getTooltipAffordanceString());
 		}
 	}
 
@@ -99,9 +95,8 @@ public class HoverControlCreator extends
 			return false;
 
 		if (control instanceof IInformationControlExtension4) {
-			String tooltipAffordanceString = "Press F2 for focus";
 			((IInformationControlExtension4) control)
-					.setStatusText(tooltipAffordanceString);
+					.setStatusText(EditorsUI.getTooltipAffordanceString());
 		}
 
 		return true;

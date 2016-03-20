@@ -45,9 +45,10 @@ public class IDETernFile extends AbstractTernFile implements ITernFile {
 	
 	@Override
 	public String getFullName(ITernProject project) {
-		IProject ip = (IProject) project.getAdapter(IProject.class);
-		if (iFile.getProject().equals(ip)) {
-			return iFile.getProjectRelativePath().toString();
+		IPath p = iFile.getFullPath();
+		IPath projectDir = new Path(project.getProjectDir().toString());
+		if (projectDir.isPrefixOf(p)) {
+			return p.removeFirstSegments(projectDir.segmentCount()).toString();
 		}
 		return PROJECT_PROTOCOL + iFile.getFullPath().makeRelative().toString();
 	}
@@ -115,7 +116,7 @@ public class IDETernFile extends AbstractTernFile implements ITernFile {
 		if (!docLoaded) {
 			docLoaded = true;
 			ITextFileBufferManager manager = FileBuffers.getTextFileBufferManager();
-			IPath location = iFile.getLocation();
+			IPath location = iFile.getFullPath();
 			ITextFileBuffer buffer = manager.getTextFileBuffer(location,
 					LocationKind.NORMALIZE);
 			if (buffer != null ) {

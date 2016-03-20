@@ -10,13 +10,12 @@
  */
 package tern.eclipse.ide.ui.hover;
 
-import java.io.IOException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.internal.text.html.BrowserInformationControl;
+import org.eclipse.ui.PlatformUI;
 
 import tern.ITernFile;
-import tern.TernException;
+import tern.ITernProject;
 import tern.eclipse.ide.core.IIDETernProject;
 import tern.eclipse.ide.ui.utils.EditorUtils;
 import tern.eclipse.jface.text.HoverLocationListener;
@@ -28,13 +27,11 @@ import tern.utils.StringUtils;
  * IDE hover location listener.
  *
  */
-public class IDEHoverLocationListener extends HoverLocationListener implements
-		ITernDefinitionCollector {
+public class IDEHoverLocationListener extends HoverLocationListener implements ITernDefinitionCollector {
 
 	private final ITernHoverInfoProvider provider;
 
-	public IDEHoverLocationListener(BrowserInformationControl control,
-			ITernHoverInfoProvider provider) {
+	public IDEHoverLocationListener(BrowserInformationControl control, ITernHoverInfoProvider provider) {
 		super(control);
 		this.provider = provider;
 	}
@@ -42,9 +39,24 @@ public class IDEHoverLocationListener extends HoverLocationListener implements
 	@Override
 	protected void handleTernFileLink(String loc) {
 		super.handleTernFileLink(loc);
-		IFile file = provider.getTernProject().getIDEFile(loc);
-		if (file.exists()) {
-			EditorUtils.openInEditor(file, -1, -1, true);
+		ITernProject tp = null;
+		if (provider.getTernProject() == null) {
+			// backup, get the current editors project
+			IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+					.getEditorInput().getAdapter(IFile.class);
+			if (file != null) {
+				tp = file.getProject().getAdapter(ITernProject.class);
+			}
+		} else {
+			tp = provider.getTernProject();
+		}
+		if (tp != null) {
+			IFile file = ((IIDETernProject) tp).getIDEFile(loc);
+			if (file.exists()) {
+				EditorUtils.openInEditor(file, -1, -1, true);
+			}
+		} else {
+			// TODO Log
 		}
 	}
 
@@ -56,8 +68,7 @@ public class IDEHoverLocationListener extends HoverLocationListener implements
 		if (tf != null) {
 			IIDETernProject ternProject = provider.getTernProject();
 			Integer pos = provider.getOffset();
-			TernDefinitionQuery query = new TernDefinitionQuery(
-					tf.getFullName(ternProject), pos);
+			TernDefinitionQuery query = new TernDefinitionQuery(tf.getFullName(ternProject), pos);
 			try {
 				ternProject.request(query, tf, this);
 			} catch (Exception e) {
@@ -70,11 +81,8 @@ public class IDEHoverLocationListener extends HoverLocationListener implements
 	public void setDefinition(String filename, Long start, Long end) {
 		IFile file = getFile(filename);
 		if (file != null && file.exists()) {
-			EditorUtils.openInEditor(
-					file,
-					start != null ? start.intValue() : -1,
-					start != null && end != null ? end.intValue()
-							- start.intValue() : -1, true);
+			EditorUtils.openInEditor(file, start != null ? start.intValue() : -1,
+					start != null && end != null ? end.intValue() - start.intValue() : -1, true);
 		}
 	}
 

@@ -52,7 +52,8 @@ public class HoverLocationListener extends LocationAdapter {
 		event.doit = false;
 
 		if (loc.startsWith(TERN_FILE_PROTOCOL)) { //$NON-NLS-1$
-			handleTernFileLink(loc);
+			String file = loc.substring(TERN_FILE_PROTOCOL.length(), loc.length());
+			handleTernFileLink(file);
 			return;
 		}
 
@@ -82,6 +83,7 @@ public class HoverLocationListener extends LocationAdapter {
 		control.notifyDelayedInputChange(null);
 		control.dispose(); // FIXME: should have protocol to hide,
 							// rather than dispose
+		
 	}
 
 	protected void handleTernDefinitionLink(String loc) {
@@ -104,12 +106,7 @@ public class HoverLocationListener extends LocationAdapter {
 	}
 
 	public static void addLinkListener(final BrowserInformationControl control) {
-		addLinkListener(control, new HoverLocationListener(control));
-	}
-
-	public static void addLinkListener(final BrowserInformationControl control,
-			LocationListener listener) {
-		control.addLocationListener(listener);
+		control.addLocationListener(new HoverLocationListener(control));
 	}
 
 }

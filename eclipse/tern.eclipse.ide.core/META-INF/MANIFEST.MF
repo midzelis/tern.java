@@ -19,8 +19,9 @@ Require-Bundle: org.eclipse.core.runtime,
 Export-Package: tern.eclipse.ide.core,
  tern.eclipse.ide.core.preferences,
  tern.eclipse.ide.core.resources,
- tern.eclipse.ide.core.utils
-Bundle-ActivationPolicy: lazy
+ tern.eclipse.ide.core.utils,
+ tern.eclipse.ide.internal.core.resources
 Bundle-Activator: tern.eclipse.ide.core.TernCorePlugin
 Import-Package: com.eclipsesource.json;version="[0.9.4,0.9.5)",
  minimatch;version="[1.1.0,1.1.1)"
+Bundle-ActivationPolicy: lazy
