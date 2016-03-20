@@ -19,7 +19,9 @@ public class TernConsoleHelper {
 	private TernConsoleHelper() {
 	}
 
-	public static void showConsole(TernConsole console) {
+
+	public static void ensureConsole(TernConsole console) {
+
 		if (console != null) {
 			IConsoleManager manager = ConsolePlugin.getDefault()
 					.getConsoleManager();
@@ -33,6 +35,14 @@ public class TernConsoleHelper {
 			if (!exists) {
 				manager.addConsoles(new IConsole[] { console });
 			}
+		}
+	}
+	
+	public static void showConsole(TernConsole console) {
+		if (console != null) {
+			ensureConsole(console);
+			IConsoleManager manager = ConsolePlugin.getDefault()
+					.getConsoleManager();
 			manager.showConsoleView(console);
 		}
 	}

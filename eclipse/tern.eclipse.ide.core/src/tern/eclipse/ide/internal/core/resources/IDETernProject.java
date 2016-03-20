@@ -196,6 +196,10 @@ public class IDETernProject extends TernProject implements IIDETernProject, ITer
 		return TernNatureAdaptersManager.getManager().hasTernNature(project);
 	}
 
+	public static IProject getAlternative(IProject project) {
+		return TernNatureAdaptersManager.getManager().getAlternative(project);
+	}
+	
 	@Override
 	protected void doLoad() throws IOException {
 		try {
@@ -430,7 +434,8 @@ public class IDETernProject extends TernProject implements IIDETernProject, ITer
 	 */
 	@Override
 	public List<ITernScriptPath> getScriptPaths() {
-		return scriptPaths;
+//		return scriptPaths;
+		return Collections.emptyList();
 	}
 
 	/**

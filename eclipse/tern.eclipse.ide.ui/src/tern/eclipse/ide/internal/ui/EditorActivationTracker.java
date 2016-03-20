@@ -69,24 +69,24 @@ public class EditorActivationTracker extends AllInOneWorkbenchListener {
 
 	@Override
 	public void partActivated(IWorkbenchPart part) {
-		IFile file = getFile(part);
-		if (file != null
-				&& (TernResourcesManager.isHTMLFile(file) || TernResourcesManager
-						.isJSFile(file))) {
-			// Ensure that everything is synchronized when JS or HTML file is
-			// opened
-			final ITernProject project = TernResourcesManager
-					.getTernProject(file.getProject());
-			if (project != null) {
-				new Job("Synchronizing script resources with Tern server...") {
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
+		final IFile file = getFile(part);
+		if (file != null && (TernResourcesManager.isHTMLFile(file) || TernResourcesManager.isJSFile(file))) {
+
+			new Job("Synchronizing script resources with Tern server...") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					// Ensure that everything is synchronized when JS or HTML
+					// file is
+					// opened
+					final ITernProject project = TernResourcesManager.getTernProject(file.getProject());
+					if (project != null) {
 						monitor.beginTask("", -1); //$NON-NLS-1$
 						project.getFileSynchronizer().ensureSynchronized();
-						return Status.OK_STATUS;
 					}
-				}.schedule();
-			}
+					return Status.OK_STATUS;
+				}
+			}.schedule();
+
 		}
 	}
 

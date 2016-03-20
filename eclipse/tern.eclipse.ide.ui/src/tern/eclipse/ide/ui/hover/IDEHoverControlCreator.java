@@ -40,7 +40,7 @@ public class IDEHoverControlCreator extends HoverControlCreator {
 
 	@Override
 	protected void addLinkListener(BrowserInformationControl control) {
-		HoverLocationListener.addLinkListener(control,
-				new IDEHoverLocationListener(control, provider));
+		final BrowserInformationControl control1 = control;
+		control1.addLocationListener(new IDEHoverLocationListener(control, provider));
 	}
 }
