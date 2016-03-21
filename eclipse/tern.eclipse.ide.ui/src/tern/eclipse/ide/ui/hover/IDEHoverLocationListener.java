@@ -42,10 +42,10 @@ public class IDEHoverLocationListener extends HoverLocationListener implements I
 		ITernProject tp = null;
 		if (provider.getTernProject() == null) {
 			// backup, get the current editors project
-			IFile file = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+			IFile file = (IFile)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
 					.getEditorInput().getAdapter(IFile.class);
 			if (file != null) {
-				tp = file.getProject().getAdapter(ITernProject.class);
+				tp = (ITernProject) file.getProject().getAdapter(ITernProject.class);
 			}
 		} else {
 			tp = provider.getTernProject();
