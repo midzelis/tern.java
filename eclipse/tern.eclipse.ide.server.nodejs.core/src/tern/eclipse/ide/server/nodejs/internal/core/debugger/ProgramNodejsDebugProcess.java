@@ -43,14 +43,14 @@ public class ProgramNodejsDebugProcess extends AbstractNodejsDebugProcess {
 	protected void start(ILaunchConfigurationWorkingCopy workingCopy) throws Exception {
 
 		// Node.js installation path
-		workingCopy.setAttribute(IExternalToolConstants.ATTR_LOCATION, getNodeInstallPath());
-
-		// Working directory: the project
-		workingCopy.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, getWorkingDir());
-
-		// Arguments
-		String args = getArgs();
-		workingCopy.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, args);
+//		workingCopy.setAttribute(IExternalToolConstants.ATTR_LOCATION, getNodeInstallPath());
+//
+//		// Working directory: the project
+//		workingCopy.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, getWorkingDir());
+//
+//		// Arguments
+//		String args = getArgs();
+//		workingCopy.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, args);
 
 		notifyCreateProcess(Collections.<String> emptyList(), projectDir);
 

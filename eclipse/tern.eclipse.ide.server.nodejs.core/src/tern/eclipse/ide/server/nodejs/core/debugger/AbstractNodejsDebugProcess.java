@@ -86,6 +86,7 @@ public abstract class AbstractNodejsDebugProcess extends AbstractNodejsProcess {
 			} else {
 				workingCopy = type.newInstance(null, manager.generateLaunchConfigurationName(launchName));
 			}
+			workingCopy.doSave();
 			start(workingCopy);
 			if (isSaveLaunch()) {
 				workingCopy.doSave();
@@ -178,23 +179,26 @@ public abstract class AbstractNodejsDebugProcess extends AbstractNodejsProcess {
 
 		@Override
 		protected void processLine(String line) {
+			System.out.println(line);
 			if (getPort() == null) {
 				if (isWaitOnPort()) {
 					// port was not getted, try to get it.
 					if (line.length() > 0) { // $NON-NLS-1$
-						Integer port = Integer.parseInt(line.substring("Listening on port ".length(), line.length())); //$NON-NLS-1$
-
-						// port is getted, notify that process is
-						// started.
-						setPort(port);
-
-						synchronized (lock) {
-							lock.notifyAll();
+						if (line.startsWith("Listening on port ")) {
+							Integer port = Integer.parseInt(line.substring("Listening on port ".length(), line.length())); //$NON-NLS-1$
+	
+							// port is getted, notify that process is
+							// started.
+							setPort(port);
+	
+							synchronized (lock) {
+								lock.notifyAll();
+							}
+							if (startTime == 0) {
+								startTime = System.nanoTime();
+							}
+							notifyStartProcess(startTime);
 						}
-						if (startTime == 0) {
-							startTime = System.nanoTime();
-						}
-						notifyStartProcess(startTime);
 					}
 				} else {
 					synchronized (lock) {
