@@ -201,7 +201,7 @@ public class TernFileSynchronizer implements ITernFileSynchronizer {
 							TernFile tf = file.toTernServerFile(getProject());
 							doc.addFile(tf);
 							synced.add(name);
-							System.out.println(name);
+//					System.out.println(name);
 							totalSize += tf.getText().length();
 						} catch (IOException e) {
 							getProject().handleException(e);

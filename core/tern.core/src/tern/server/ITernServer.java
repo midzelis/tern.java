@@ -11,6 +11,7 @@
 package tern.server;
 
 import tern.ITernFileSynchronizer;
+import tern.ITernProject;
 import tern.TernException;
 import tern.server.protocol.IJSONObjectHelper;
 import tern.server.protocol.ITernResultsCollector;
@@ -120,4 +121,6 @@ public interface ITernServer {
 	 * @param listener
 	 */
 	void off(String type, IMessageHandler listener);
+
+	ITernProject getProject();
 }

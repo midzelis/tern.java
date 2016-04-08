@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.ProcessBuilder.Redirect;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,7 +66,6 @@ public class NodejsProcess extends AbstractNodejsProcess {
 				BufferedReader br = new BufferedReader(isr);
 				try {
 					while ((line = br.readLine()) != null) {
-						System.out.println(line);
 						if (port == null) {
 							// port was not getted, try to get it.
 							if (line.startsWith("Listening on port ")) {
@@ -218,15 +216,11 @@ public class NodejsProcess extends AbstractNodejsProcess {
 
 		try {
 			List<String> commands = createCommands();
-			//commands.remove(0);
-			//commands.add(0, "/usr/local/bin/node-debug");
-			commands.add(1,"--debug");
 			ProcessBuilder builder = new ProcessBuilder(commands);
-
-			builder.environment().put("PATH", "/usr/local/git/bin:/sw/bin/:/usr/local/bin:/usr/local/:/usr/local/sbin:/usr/local/mysql/bin:/Users/midzelis/blt:/Users/midzelis/blt/blt-code/bin:/Users/midzelis/blt/blt-code/blt-python/bin:/Users/midzelis/bin:/Users/midzelis/blt/tools/bin:/Users/midzelis/blt/tools/maven/apache-maven-3.3.3/bin:/Users/midzelis/blt/tools/Darwin/oracle/10.2.0.5/bin:/Users/midzelis/blt/tools/Darwin/oracle/10.2.0.5/client/bin:/Users/midzelis/blt/tools/Darwin/oracle/10.2.0.5/client/lib:/Users/midzelis/blt/pbj/jenkins-sfdc:/usr/local/bin:/Applications/FirefoxESR.app/Contents/MacOS:/Users/midzelis/apps/apache-maven-3.3.9/bin:/Users/midzelis/blt/bin:/Users/midzelis/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/midzelis/git/reach-tools/bin:/Users/midzelis/go/bin:/Users/midzelis/blt/tools/Darwin/oracle/11.2.0.3_x64:/sbin:/usr/local/bin/");
-			builder.redirectErrorStream(true);
+			// builder.redirectErrorStream(true);
 			builder.directory(getProjectDir());
 			notifyCreateProcess(commands, projectDir);
+
 			this.process = builder.start();
 
 			outThread = new Thread(new StdOut());
