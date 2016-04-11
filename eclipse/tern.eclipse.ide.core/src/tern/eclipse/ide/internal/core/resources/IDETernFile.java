@@ -13,6 +13,7 @@ package tern.eclipse.ide.internal.core.resources;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
@@ -20,101 +21,80 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.link.LinkedModeUI.ExitFlags;
 
 import tern.ITernFile;
 import tern.ITernProject;
 import tern.TernResourcesManager;
+import tern.eclipse.ide.core.TernCorePlugin;
 import tern.resources.AbstractTernFile;
 import tern.utils.IOUtils;
 
 public class IDETernFile extends AbstractTernFile implements ITernFile {
-	
+
 	private IFile iFile;
 	private IDocument document;
 	private boolean docLoaded;
-	
+
 	public IDETernFile(IFile file) {
 		this.iFile = file;
 	}
-	
+
 	@Override
 	public String getFullName(ITernProject project) {
 		IPath location = iFile.getLocation();
-		if (location==null) {
-			IPath leadingPaths = new Path("");
-			IProject prj = null;
-			IContainer[] containers = ResourcesPlugin.getWorkspace().getRoot().findContainersForLocationURI(iFile.getLocationURI());
-			IContainer linkContainer = containers[0];
-			// look for the tern project file marker in resource paths, track leading paths
-			IPath parent = linkContainer.getProject().getLocation();
-			while (parent.segmentCount() > 0) {
-				String last = parent.lastSegment();
-				parent = parent.removeLastSegments(1);
-				if (parent.append(".tern-project").toFile().exists()) {
-					IContainer container = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(parent);
-					if (container != null) {
-						if (container instanceof IProject) {
-							prj = (IProject)container;
-							break;
-						}
+		if (location == null) {
+			try {
+				ITernProject prj = TernCorePlugin.getAlternate(iFile.getProject());
+				if (prj.equals(project)) {
+					URI locationURI = iFile.getLocationURI();
+					String path = locationURI.getPath();
+					path = path.substring(0,path.indexOf("!/"));
+					
+					IPath p = iFile.getProject().getLocation();
+					IPath f = new Path(path);
+					if (p.isPrefixOf(f)) {
+						String s = f.removeFirstSegments(f.matchingFirstSegments(p)).toString();
+						return s;
 					}
-				} else {
-					leadingPaths.append(last);
 				}
+			} catch (CoreException ignore) {
+
 			}
-			if (prj!=null) {
-				String name = leadingPaths.append(iFile.getFullPath()).makeRelative().toString();
-				return name;
-			}
-		
+
 			return PROJECT_PROTOCOL + iFile.getFullPath().makeRelative().toString();
 		} else {
-			IProject prj = null;
-			IPath parent = location;
-			while (parent.segmentCount() > 0) {
-				parent = parent.removeLastSegments(1);
-				if (parent.append(".tern-project").toFile().exists()) {
-					IContainer container = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(parent);
-					if (container != null) {
-						if (container instanceof IProject) {
-							prj = (IProject)container;
-							break;
-						}
+			try {
+				ITernProject prj = TernCorePlugin.getAlternate(iFile.getProject());
+				if (prj.equals(project)) {
+					IPath p = iFile.getProject().getLocation();
+					IPath f = iFile.getLocation();
+					if (p.isPrefixOf(f)) {
+						String s = f.removeFirstSegments(f.matchingFirstSegments(p)).toString();
+						return s;
 					}
 				}
-			}
-			IProject ternProject = (IProject)project.getAdapter(IProject.class);
-			if (ternProject.equals(prj)) {
-				IPath p = ternProject.getLocation();
-				IPath f = iFile.getLocation();
-				if (p.isPrefixOf(f)) {
-					String s =  f.removeFirstSegments(f.matchingFirstSegments(p)).toString();
-					return s;
-				}
+			} catch (CoreException ignore) {
 			}
 			return PROJECT_PROTOCOL + iFile.getFullPath().makeRelative().toString();
 		}
 	}
-	
-	
-	
+
 	@Override
 	public String getFileName() {
 		return iFile.getName();
 	}
-	
+
 	@Override
 	public String getFileExtension() {
 		return iFile.getFileExtension();
 	}
-	
+
 	@Override
 	public ITernFile getRelativeFile(String relativePath) {
 		IContainer parent = iFile.getParent();
@@ -128,7 +108,7 @@ public class IDETernFile extends AbstractTernFile implements ITernFile {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String getContents() throws IOException {
 		try {
@@ -146,7 +126,7 @@ public class IDETernFile extends AbstractTernFile implements ITernFile {
 			throw new IOException(e);
 		}
 	}
-	
+
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapterClass) {
 		if (adapterClass == IFile.class || adapterClass == IResource.class) {
@@ -163,21 +143,20 @@ public class IDETernFile extends AbstractTernFile implements ITernFile {
 		}
 		return null;
 	}
-	
+
 	protected IDocument getDocument() {
 		if (!docLoaded) {
 			docLoaded = true;
 			ITextFileBufferManager manager = FileBuffers.getTextFileBufferManager();
 			IPath location = iFile.getFullPath();
-			ITextFileBuffer buffer = manager.getTextFileBuffer(location,
-					LocationKind.IFILE);
-			if (buffer != null ) {
+			ITextFileBuffer buffer = manager.getTextFileBuffer(location, LocationKind.IFILE);
+			if (buffer != null) {
 				this.document = buffer.getDocument();
 			}
 		}
 		return this.document;
 	}
-	
+
 	@Override
 	public String toString() {
 		return iFile.getFullPath().toString();
@@ -187,7 +166,7 @@ public class IDETernFile extends AbstractTernFile implements ITernFile {
 	public boolean isAccessible() {
 		return iFile.isAccessible();
 	}
-	
+
 	public IFile getFile() {
 		return iFile;
 	}
