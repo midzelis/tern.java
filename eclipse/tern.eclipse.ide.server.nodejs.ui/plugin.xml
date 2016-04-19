@@ -12,7 +12,7 @@
              id="tern.eclipse.ide.server.nodejs.preferences"
              name="%TernNodejsPreferencesPage.name">
           <keywordReference
-                id="tern.eclipse.ide.tern">
+                id="tern.eclipse.ide.ui_tern">
           </keywordReference>
        </page>
 	</extension>	

@@ -21,12 +21,12 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.link.LinkedModeUI.ExitFlags;
 
 import tern.ITernFile;
 import tern.ITernProject;
@@ -54,12 +54,12 @@ public class IDETernFile extends AbstractTernFile implements ITernFile {
 				if (prj.equals(project)) {
 					URI locationURI = iFile.getLocationURI();
 					String path = locationURI.getPath();
-					path = path.substring(0,path.indexOf("!/"));
+					path = path.replace("!/", ".link/");
 					
-					IPath p = iFile.getProject().getLocation();
+					IPath p = ((IProject)prj.getAdapter(IProject.class)).getLocation();
 					IPath f = new Path(path);
 					if (p.isPrefixOf(f)) {
-						String s = f.removeFirstSegments(f.matchingFirstSegments(p)).toString();
+						String s = f.removeFirstSegments(f.matchingFirstSegments(p)).toString() ;
 						return s;
 					}
 				}
@@ -72,7 +72,7 @@ public class IDETernFile extends AbstractTernFile implements ITernFile {
 			try {
 				ITernProject prj = TernCorePlugin.getAlternate(iFile.getProject());
 				if (prj.equals(project)) {
-					IPath p = iFile.getProject().getLocation();
+					IPath p = ((IProject)prj.getAdapter(IProject.class)).getLocation();
 					IPath f = iFile.getLocation();
 					if (p.isPrefixOf(f)) {
 						String s = f.removeFirstSegments(f.matchingFirstSegments(p)).toString();
