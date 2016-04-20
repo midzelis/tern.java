@@ -255,10 +255,10 @@ public class TernNatureAdaptersManager implements IRegistryChangeListener {
 	 */
 	public void addDefaultModules(IDETernProject ternProject)
 			throws CoreException {
-		if (ternProject.hasModules()) {
-			// tern project is not empty, don't add default modules
-			return;
-		}
+//		if (ternProject.hasModules()) {
+//			// tern project is not empty, don't add default modules
+//			return;
+//		}
 
 		List<ITernModule> contributedModules = new ArrayList<ITernModule>();
 		Map<ITernModule, JsonObject> moduleOptions = new HashMap<ITernModule, JsonObject>();
