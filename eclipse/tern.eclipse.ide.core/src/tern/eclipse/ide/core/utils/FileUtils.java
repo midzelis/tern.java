@@ -89,7 +89,7 @@ public class FileUtils {
 	 * @return true if the given resource is valid and false otherwise.
 	 */
 	public static boolean isValidResource(IResource resource) {
-		return !(resource == null || resource.isDerived() || resource.isTeamPrivateMember() || !resource.isAccessible()
+		return !(resource == null || resource.isTeamPrivateMember() || !resource.isAccessible()
 				|| resource.getName().charAt(0) == '.');
 	}
 }

@@ -49,8 +49,6 @@ public class ScriptResourceProxyVisitor implements IResourceProxyVisitor {
 
 	@Override
 	public boolean visit(IResourceProxy proxy) throws CoreException {
-		if (proxy.isDerived())
-			return false;
 		int resourceType = proxy.getType();
 		switch (resourceType) {
 		case IResource.PROJECT:
