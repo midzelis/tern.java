@@ -49,13 +49,13 @@ public class NodejsTernHelper {
 	public static final int DEFAULT_REMOTE_PORT = 1234;
 
 	// properties for direct access
-	public static final long DEFAULT_TIMEOUT = 200L; // 200ms
+	public static final long DEFAULT_TIMEOUT = 2000L; // 200ms
 	public static final int DEFAULT_TEST_NUMBER = 50; // try to retrieve the
 														// node.js port 50
 														// each time on timeout
 														// (max=50*200ms=10000ms).
 
-	public static final boolean DEFAULT_PERSISTENT = false;
+	public static final boolean DEFAULT_PERSISTENT = true;
 
 	// tern uses UTF-8 encoding
 	private static final String UTF_8 = "UTF-8";
