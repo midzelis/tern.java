@@ -249,6 +249,7 @@ public class TernFileSynchronizer implements ITernFileSynchronizer {
 				if (query != null) {
 					if (TernResourcesManager.isJSFile(file)) {
 						addJSFile(doc, file);
+						sendFiles(doc);
 						return;
 					} else if (TernResourcesManager.isHTMLFile(file)) {
 						// This is HTML file case: never keep the file on the server
